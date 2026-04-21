@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --primary: #2e7d32; --secondary: #1b5e20; }
-        body { background-color: #f4f7f6; font-family: 'Kanit', sans-serif; }
-        .hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px 15px; border-radius: 0 0 30px 30px; margin-bottom: 25px; text-align: center; }
+        body { background-color: #f4f7f6; font-family: 'Kanit', sans-serif; padding-bottom: 50px; }
+        .hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px 15px; border-radius: 0 0 30px 30px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
         /* สไตล์ปุ่มเมนูหลัก */
         .menu-btn { background: white; border-radius: 20px; padding: 20px; text-align: center; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; width: 100%; margin-bottom: 15px; }
@@ -17,14 +17,16 @@
         .icon-circle { width: 60px; height: 60px; border-radius: 50%; line-height: 60px; margin: 0 auto 10px; font-size: 24px; color: white; }
         
         /* สไตล์ฟอร์มบันทึกข้อมูล */
-        .form-container { display: none; background: white; border-radius: 25px; padding: 20px; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .form-container { display: none; background: white; border-radius: 25px; padding: 25px; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .section-title { font-size: 1rem; font-weight: bold; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 10px; margin: 20px 0 15px; }
-        .form-control { border-radius: 10px; border: 1px solid #ddd; padding: 10px; }
-        .btn-save { background: var(--primary); color: white; border-radius: 12px; padding: 12px; width: 100%; border: none; font-weight: bold; margin-top: 20px; }
+        .form-control { border-radius: 10px; border: 1px solid #ddd; padding: 10px; margin-bottom: 5px; }
+        .btn-save { background: var(--primary); color: white; border-radius: 12px; padding: 15px; width: 100%; border: none; font-weight: bold; margin-top: 20px; transition: 0.3s; }
+        .btn-save:disabled { background: #ccc; }
         
         /* ส่วนประวัติ */
         #historySection { display: none; }
-        .bird-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #ff9800; }
+        .bird-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #ff9800; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .loading-spinner { display: none; margin-left: 10px; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&display=swap" rel="stylesheet">
 </head>
@@ -53,7 +55,7 @@
     </div>
 
     <div id="formSection" class="form-container">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">บันทึกข้อมูลใหม่</h4>
             <button class="btn-close" onclick="goBack()"></button>
         </div>
@@ -63,60 +65,61 @@
             <div class="row g-2">
                 <div class="col-6">
                     <label class="small text-muted">ID ลูกนก</label>
-                    <input type="text" class="form-control" placeholder="เช่น ZAM 210">
+                    <input type="text" id="bird_id" class="form-control" placeholder="ZAM 210" required>
                 </div>
                 <div class="col-6">
                     <label class="small text-muted">วันเกิด</label>
-                    <input type="date" class="form-control">
+                    <input type="date" id="born" class="form-control" required>
                 </div>
                 <div class="col-4">
                     <label class="small text-muted">สีตัว</label>
-                    <input type="text" class="form-control" placeholder="BODY">
+                    <input type="text" id="body" class="form-control" placeholder="BODY">
                 </div>
                 <div class="col-4">
                     <label class="small text-muted">สีหัว</label>
-                    <input type="text" class="form-control" placeholder="HEAD">
+                    <input type="text" id="head" class="form-control" placeholder="HEAD">
                 </div>
                 <div class="col-4">
                     <label class="small text-muted">สีอก</label>
-                    <input type="text" class="form-control" placeholder="CHEST">
+                    <input type="text" id="chest" class="form-control" placeholder="CHEST">
+                </div>
+                <div class="col-12 mt-2">
+                    <label class="small text-muted">ห่วงขา (Ring)</label>
+                    <input type="text" id="ring" class="form-control" placeholder="สีห่วงขา">
                 </div>
             </div>
 
             <div class="section-title">2. ข้อมูลพ่อพันธุ์ (Male)</div>
             <div class="row g-2">
                 <div class="col-12 mb-2">
-                    <input type="text" class="form-control" placeholder="ID พ่อพันธุ์">
+                    <input type="text" id="father_id" class="form-control" placeholder="ID พ่อพันธุ์">
                 </div>
-                <div class="col-6">
-                    <input type="text" class="form-control" placeholder="ฟาร์ม/ประเทศ">
-                </div>
-                <div class="col-6 text-center pt-2 small text-muted">ข้อมูลสีดึงอัตโนมัติ*</div>
             </div>
 
             <div class="section-title">3. ข้อมูลแม่พันธุ์ (Female)</div>
             <div class="row g-2">
                 <div class="col-12 mb-2">
-                    <input type="text" class="form-control" placeholder="ID แม่พันธุ์">
+                    <input type="text" id="mother_id" class="form-control" placeholder="ID แม่พันธุ์">
                 </div>
-                <div class="col-6">
-                    <input type="text" class="form-control" placeholder="ฟาร์ม/ประเทศ">
-                </div>
-                <div class="col-6 text-center pt-2 small text-muted">ข้อมูลสีดึงอัตโนมัติ*</div>
             </div>
 
-            <button type="button" class="btn-save" onclick="saveData()">
-                <i class="fas fa-save me-2"></i>บันทึกข้อมูล
+            <button type="submit" class="btn-save" id="btnSubmit">
+                <i class="fas fa-save me-2"></i><span id="btnText">บันทึกข้อมูลลง Sheets</span>
+                <span class="spinner-border spinner-border-sm loading-spinner" id="loader"></span>
             </button>
         </form>
     </div>
 
     <div id="historySection">
-        <button class="btn btn-sm btn-secondary mb-3" onclick="goBack()">กลับหน้าหลัก</button>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4><i class="fas fa-history me-2"></i>ประวัติลูกนก</h4>
+            <button class="btn btn-sm btn-secondary" onclick="goBack()">กลับ</button>
+        </div>
+        
         <div class="bird-card d-flex justify-content-between align-items-center">
             <div>
-                <div class="fw-bold">ZAM 201</div>
-                <small>BORN: 20 Sep 25</small>
+                <div class="fw-bold text-success">ZAM 201</div>
+                <small class="text-muted">BORN: 20 Sep 25 | Body: Green</small>
             </div>
             <i class="fas fa-chevron-right text-muted"></i>
         </div>
@@ -124,23 +127,69 @@
 </div>
 
 <script>
+    // *** แก้ไขลิงก์ Web App URL จาก Google Apps Script ที่นี่ ***
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwk2UrKeNiJcSaNQCLbyEAIdpeaXNVzTHPjJ7MGmnW34LxcxSWi-OJbF8E53cKHKjE/exec'; 
+
     function showForm() {
         document.getElementById('mainMenu').style.display = 'none';
         document.getElementById('formSection').style.display = 'block';
     }
+
     function showHistory() {
         document.getElementById('mainMenu').style.display = 'none';
         document.getElementById('historySection').style.display = 'block';
     }
+
     function goBack() {
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('historySection').style.display = 'none';
         document.getElementById('mainMenu').style.display = 'block';
     }
-    function saveData() {
-        alert('ระบบจะทำการส่งข้อมูลไปยัง Google Sheets...');
-        // ในขั้นต่อไปเราจะเชื่อมต่อกับ Google Apps Script เพื่อบันทึกจริง
-    }
+
+    // ฟังก์ชันส่งข้อมูลไป Google Sheets
+    const form = document.getElementById('birdForm');
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        
+        const btnSubmit = document.getElementById('btnSubmit');
+        const loader = document.getElementById('loader');
+        const btnText = document.getElementById('btnText');
+
+        // แสดงสถานะกำลังโหลด
+        btnSubmit.disabled = true;
+        loader.style.display = 'inline-block';
+        btnText.innerText = 'กำลังบันทึก...';
+
+        const formData = {
+            id: document.getElementById('bird_id').value,
+            born: document.getElementById('born').value,
+            body: document.getElementById('body').value,
+            head: document.getElementById('head').value,
+            chest: document.getElementById('chest').value,
+            ring: document.getElementById('ring').value,
+            father_id: document.getElementById('father_id').value,
+            mother_id: document.getElementById('mother_id').value
+        };
+
+        fetch(scriptURL, {
+            method: 'POST',
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            alert('บันทึกข้อมูลเรียบร้อยแล้ว!');
+            form.reset();
+            goBack();
+        })
+        .catch(error => {
+            console.error('Error!', error.message);
+            alert('เกิดข้อผิดพลาด: ' + error.message);
+        })
+        .finally(() => {
+            btnSubmit.disabled = false;
+            loader.style.display = 'none';
+            btnText.innerText = 'บันทึกข้อมูลลง Sheets';
+        });
+    });
 </script>
 
 </body>
