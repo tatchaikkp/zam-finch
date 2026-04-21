@@ -12,43 +12,42 @@
         .hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px 15px; border-radius: 0 0 30px 30px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
         /* สไตล์ปุ่มเมนูหลัก */
-        .menu-btn { background: white; border-radius: 20px; padding: 20px; text-align: center; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; width: 100%; margin-bottom: 15px; }
+        .menu-btn { background: white; border-radius: 20px; padding: 25px; text-align: center; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; width: 100%; margin-bottom: 15px; }
         .menu-btn:active { transform: scale(0.95); }
-        .icon-circle { width: 60px; height: 60px; border-radius: 50%; line-height: 60px; margin: 0 auto 10px; font-size: 24px; color: white; }
+        .icon-circle { width: 65px; height: 65px; border-radius: 50%; line-height: 65px; margin: 0 auto 12px; font-size: 28px; color: white; }
         
-        /* สไตล์ฟอร์มบันทึกข้อมูล */
+        /* สไตล์ฟอร์ม */
         .form-container { display: none; background: white; border-radius: 25px; padding: 25px; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .section-title { font-size: 1rem; font-weight: bold; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 10px; margin: 20px 0 15px; }
         .form-control { border-radius: 10px; border: 1px solid #ddd; padding: 10px; margin-bottom: 5px; }
-        .btn-save { background: var(--primary); color: white; border-radius: 12px; padding: 15px; width: 100%; border: none; font-weight: bold; margin-top: 20px; transition: 0.3s; }
-        .btn-save:disabled { background: #ccc; }
+        .btn-save { background: var(--primary); color: white; border-radius: 12px; padding: 15px; width: 100%; border: none; font-weight: bold; margin-top: 20px; font-size: 1.1rem; }
         
         /* ส่วนประวัติ */
         #historySection { display: none; }
         .bird-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #ff9800; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .loading-spinner { display: none; margin-left: 10px; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="hero">
-    <h3><i class="fas fa-kiwi-bird me-2"></i>ระบบบันทึกประวัตินก</h3>
+    <h3><i class="fas fa-kiwi-bird me-2"></i>Bird Pro Management</h3>
+    <p class="mb-0 small">ระบบจัดการข้อมูลและประวัตินก</p>
 </div>
 
 <div class="container">
     <div id="mainMenu">
-        <div class="row">
+        <div class="row g-3">
             <div class="col-6">
                 <button class="menu-btn" onclick="showForm()">
                     <div class="icon-circle bg-success"><i class="fas fa-plus"></i></div>
-                    <div class="fw-bold">เพิ่มข้อมูล</div>
+                    <div class="fw-bold">เพิ่มข้อมูลนก</div>
                 </button>
             </div>
             <div class="col-6">
                 <button class="menu-btn" onclick="showHistory()">
-                    <div class="icon-circle bg-primary"><i class="fas fa-search"></i></div>
-                    <div class="fw-bold">ดูประวัติ</div>
+                    <div class="icon-circle bg-primary"><i class="fas fa-history"></i></div>
+                    <div class="fw-bold">ประวัติลูกนก</div>
                 </button>
             </div>
         </div>
@@ -56,13 +55,13 @@
 
     <div id="formSection" class="form-container">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">บันทึกข้อมูลใหม่</h4>
+            <h4 class="mb-0 text-success">กรอกรายละเอียด</h4>
             <button class="btn-close" onclick="goBack()"></button>
         </div>
 
         <form id="birdForm">
-            <div class="section-title">1. ข้อมูลลูกนก</div>
-            <div class="row g-2">
+            <div class="section-title">1. ข้อมูลพื้นฐาน</div>
+            <div class="row g-2 mb-2">
                 <div class="col-6">
                     <label class="small text-muted">ID ลูกนก</label>
                     <input type="text" id="bird_id" class="form-control" placeholder="ZAM 210" required>
@@ -71,64 +70,72 @@
                     <label class="small text-muted">วันเกิด</label>
                     <input type="date" id="born" class="form-control" required>
                 </div>
+            </div>
+
+            <div class="row g-2 mb-2">
                 <div class="col-4">
-                    <label class="small text-muted">สีตัว</label>
+                    <label class="small text-muted">ห่วงขา (Ring)</label>
+                    <input type="text" id="ring" class="form-control" placeholder="Ring">
+                </div>
+                <div class="col-4">
+                    <label class="small text-muted">ลูกปัด 2</label>
+                    <input type="text" id="beads2" class="form-control" placeholder="Beads 2">
+                </div>
+                <div class="col-4">
+                    <label class="small text-muted">ลูกปัด 3</label>
+                    <input type="text" id="beads3" class="form-control" placeholder="Beads 3">
+                </div>
+            </div>
+
+            <div class="section-title">2. ลักษณะสี (Bird Color)</div>
+            <div class="row g-2 mb-2">
+                <div class="col-4">
                     <input type="text" id="body" class="form-control" placeholder="BODY">
                 </div>
                 <div class="col-4">
-                    <label class="small text-muted">สีหัว</label>
                     <input type="text" id="head" class="form-control" placeholder="HEAD">
                 </div>
                 <div class="col-4">
-                    <label class="small text-muted">สีอก</label>
                     <input type="text" id="chest" class="form-control" placeholder="CHEST">
                 </div>
-                <div class="col-12 mt-2">
-                    <label class="small text-muted">ห่วงขา (Ring)</label>
-                    <input type="text" id="ring" class="form-control" placeholder="สีห่วงขา">
-                </div>
             </div>
 
-            <div class="section-title">2. ข้อมูลพ่อพันธุ์ (Male)</div>
-            <div class="row g-2">
-                <div class="col-12 mb-2">
-                    <input type="text" id="father_id" class="form-control" placeholder="ID พ่อพันธุ์">
-                </div>
+            <div class="section-title">3. ข้อมูลสายเลือด</div>
+            <div class="mb-2">
+                <label class="small text-muted">รหัสพ่อพันธุ์ (Father ID)</label>
+                <input type="text" id="father_id" class="form-control" placeholder="ระบุรหัสพ่อ">
             </div>
-
-            <div class="section-title">3. ข้อมูลแม่พันธุ์ (Female)</div>
-            <div class="row g-2">
-                <div class="col-12 mb-2">
-                    <input type="text" id="mother_id" class="form-control" placeholder="ID แม่พันธุ์">
-                </div>
+            <div class="mb-3">
+                <label class="small text-muted">รหัสแม่พันธุ์ (Mother ID)</label>
+                <input type="text" id="mother_id" class="form-control" placeholder="ระบุรหัสแม่">
             </div>
 
             <button type="submit" class="btn-save" id="btnSubmit">
-                <i class="fas fa-save me-2"></i><span id="btnText">บันทึกข้อมูลลง Sheets</span>
-                <span class="spinner-border spinner-border-sm loading-spinner" id="loader"></span>
+                <i class="fas fa-save me-2"></i>บันทึกลง Google Sheets
             </button>
         </form>
     </div>
 
     <div id="historySection">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4><i class="fas fa-history me-2"></i>ประวัติลูกนก</h4>
-            <button class="btn btn-sm btn-secondary" onclick="goBack()">กลับ</button>
+            <h4 class="mb-0"><i class="fas fa-list-ul me-2"></i>รายการล่าสุด</h4>
+            <button class="btn btn-sm btn-outline-secondary" onclick="goBack()">กลับ</button>
         </div>
-        
-        <div class="bird-card d-flex justify-content-between align-items-center">
-            <div>
-                <div class="fw-bold text-success">ZAM 201</div>
-                <small class="text-muted">BORN: 20 Sep 25 | Body: Green</small>
+        <div id="historyList">
+            <div class="bird-card d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fw-bold text-success">ZAM 201</div>
+                    <small class="text-muted">ตรวจสอบข้อมูลจริงได้ที่ Google Sheets</small>
+                </div>
+                <i class="fas fa-chevron-right text-muted"></i>
             </div>
-            <i class="fas fa-chevron-right text-muted"></i>
         </div>
     </div>
 </div>
 
 <script>
-    // *** แก้ไขลิงก์ Web App URL จาก Google Apps Script ที่นี่ ***
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwk2UrKeNiJcSaNQCLbyEAIdpeaXNVzTHPjJ7MGmnW34LxcxSWi-OJbF8E53cKHKjE/exec'; 
+    // URL สำหรับส่งข้อมูล (ใช้ตัวเดิมของคุณ)
+    const scriptURL = 'https://script.google.com/macros/s/AKfycby9KEn0Ygfz7IHatsaZtCB_B8rTUaVLFePj6MSB3wU0VsWG4pEmIdmwL2zTmV6DkACv/exec'; 
 
     function showForm() {
         document.getElementById('mainMenu').style.display = 'none';
@@ -146,48 +153,37 @@
         document.getElementById('mainMenu').style.display = 'block';
     }
 
-    // ฟังก์ชันส่งข้อมูลไป Google Sheets
+    // ระบบส่งข้อมูล
     const form = document.getElementById('birdForm');
     form.addEventListener('submit', e => {
         e.preventDefault();
-        
-        const btnSubmit = document.getElementById('btnSubmit');
-        const loader = document.getElementById('loader');
-        const btnText = document.getElementById('btnText');
+        const btn = document.getElementById('btnSubmit');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังบันทึก...';
 
-        // แสดงสถานะกำลังโหลด
-        btnSubmit.disabled = true;
-        loader.style.display = 'inline-block';
-        btnText.innerText = 'กำลังบันทึก...';
-
-        const formData = {
+        const data = {
             id: document.getElementById('bird_id').value,
+            ring: document.getElementById('ring').value,
+            beads2: document.getElementById('beads2').value,
+            beads3: document.getElementById('beads3').value,
             born: document.getElementById('born').value,
             body: document.getElementById('body').value,
             head: document.getElementById('head').value,
             chest: document.getElementById('chest').value,
-            ring: document.getElementById('ring').value,
             father_id: document.getElementById('father_id').value,
             mother_id: document.getElementById('mother_id').value
         };
 
-        fetch(scriptURL, {
-            method: 'POST',
-            body: JSON.stringify(formData)
-        })
+        fetch(scriptURL, { method: 'POST', body: JSON.stringify(data) })
         .then(response => {
-            alert('บันทึกข้อมูลเรียบร้อยแล้ว!');
+            alert('บันทึกข้อมูลเข้า Google Sheets สำเร็จ!');
             form.reset();
             goBack();
         })
-        .catch(error => {
-            console.error('Error!', error.message);
-            alert('เกิดข้อผิดพลาด: ' + error.message);
-        })
+        .catch(error => alert('เกิดข้อผิดพลาด! กรุณาลองใหม่อีกครั้ง'))
         .finally(() => {
-            btnSubmit.disabled = false;
-            loader.style.display = 'none';
-            btnText.innerText = 'บันทึกข้อมูลลง Sheets';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save me-2"></i>บันทึกลง Google Sheets';
         });
     });
 </script>
