@@ -3,89 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bird Management System</title>
+    <title>Bird Pro Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #f0f2f5; font-family: 'Kanit', sans-serif; }
-        .hero-section { background: linear-gradient(135deg, #1b5e20, #4caf50); color: white; padding: 40px 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; text-align: center; margin-bottom: 30px; }
-        .menu-card { border: none; border-radius: 20px; padding: 25px; text-align: center; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-decoration: none; display: block; height: 100%; }
-        .menu-card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); background-color: #fff; }
-        .icon-box { width: 70px; height: 70px; line-height: 70px; border-radius: 50%; margin: 0 auto 15px; font-size: 30px; color: white; }
-        .bg-add { background-color: #ff9800; }
-        .bg-view { background-color: #2196f3; }
-        .menu-title { font-size: 1.2rem; font-weight: bold; color: #333; margin-bottom: 10px; }
-        .menu-desc { font-size: 0.9rem; color: #777; }
+        :root { --primary: #2e7d32; --secondary: #1b5e20; }
+        body { background-color: #f4f7f6; font-family: 'Kanit', sans-serif; }
+        .hero { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px 15px; border-radius: 0 0 30px 30px; margin-bottom: 25px; text-align: center; }
         
-        /* สไตล์สำหรับการแสดงผลประวัติ (ซ่อนไว้ก่อนกดดู) */
-        #historySection { display: none; margin-top: 20px; }
-        .bird-item { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #4caf50; }
+        /* สไตล์ปุ่มเมนูหลัก */
+        .menu-btn { background: white; border-radius: 20px; padding: 20px; text-align: center; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; width: 100%; margin-bottom: 15px; }
+        .menu-btn:active { transform: scale(0.95); }
+        .icon-circle { width: 60px; height: 60px; border-radius: 50%; line-height: 60px; margin: 0 auto 10px; font-size: 24px; color: white; }
+        
+        /* สไตล์ฟอร์มบันทึกข้อมูล */
+        .form-container { display: none; background: white; border-radius: 25px; padding: 20px; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .section-title { font-size: 1rem; font-weight: bold; color: var(--primary); border-left: 4px solid var(--primary); padding-left: 10px; margin: 20px 0 15px; }
+        .form-control { border-radius: 10px; border: 1px solid #ddd; padding: 10px; }
+        .btn-save { background: var(--primary); color: white; border-radius: 12px; padding: 12px; width: 100%; border: none; font-weight: bold; margin-top: 20px; }
+        
+        /* ส่วนประวัติ */
+        #historySection { display: none; }
+        .bird-card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #ff9800; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="hero-section">
-    <i class="fas fa-dove fa-3x mb-3"></i>
-    <h2>ระบบจัดการข้อมูลนก</h2>
-    <p>จัดการประวัติและติดตามการเจริญเติบโตได้ง่ายๆ</p>
+<div class="hero">
+    <h3><i class="fas fa-kiwi-bird me-2"></i>ระบบบันทึกประวัตินก</h3>
 </div>
 
 <div class="container">
-    <div class="row g-4">
-        <div class="col-6">
-            <a href="https://docs.google.com/spreadsheets/d/1M1H4lTkvkACb7hHpQJcUQQvLXYzNblj6ifJ0CElQ458/edit?gid=0#gid=0" target="_blank" class="menu-card">
-                <div class="icon-box bg-add">
-                    <i class="fas fa-plus"></i>
-                </div>
-                <div class="menu-title">เพิ่มข้อมูล</div>
-                <div class="menu-desc">บันทึกนกใหม่ลง Google Sheets</div>
-            </a>
-        </div>
-
-        <div class="col-6">
-            <a href="javascript:void(0);" onclick="showHistory()" class="menu-card">
-                <div class="icon-box bg-view">
-                    <i class="fas fa-search"></i>
-                </div>
-                <div class="menu-title">ประวัตินก</div>
-                <div class="menu-desc">ดูรายการนกทั้งหมด</div>
-            </a>
+    <div id="mainMenu">
+        <div class="row">
+            <div class="col-6">
+                <button class="menu-btn" onclick="showForm()">
+                    <div class="icon-circle bg-success"><i class="fas fa-plus"></i></div>
+                    <div class="fw-bold">เพิ่มข้อมูล</div>
+                </button>
+            </div>
+            <div class="col-6">
+                <button class="menu-btn" onclick="showHistory()">
+                    <div class="icon-circle bg-primary"><i class="fas fa-search"></i></div>
+                    <div class="fw-bold">ดูประวัติ</div>
+                </button>
+            </div>
         </div>
     </div>
 
-    <div id="historySection">
-        <hr>
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4><i class="fas fa-list me-2"></i>รายการลูกนก</h4>
-            <button class="btn btn-sm btn-outline-secondary" onclick="hideHistory()">ปิด</button>
-        </div>
-        
-        <div class="bird-item d-flex justify-content-between align-items-center">
-            <div>
-                <div class="fw-bold text-success">ID: ZAM 201</div>
-                <small class="text-muted">เกิด: 20 Sep 25</small>
-            </div>
-            <button class="btn btn-sm btn-primary">ดูรายละเอียด</button>
+    <div id="formSection" class="form-container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">บันทึกข้อมูลใหม่</h4>
+            <button class="btn-close" onclick="goBack()"></button>
         </div>
 
-        <div class="bird-item d-flex justify-content-between align-items-center">
-            <div>
-                <div class="fw-bold text-success">ID: ZAM 202</div>
-                <small class="text-muted">เกิด: 20 Sep 25</small>
+        <form id="birdForm">
+            <div class="section-title">1. ข้อมูลลูกนก</div>
+            <div class="row g-2">
+                <div class="col-6">
+                    <label class="small text-muted">ID ลูกนก</label>
+                    <input type="text" class="form-control" placeholder="เช่น ZAM 210">
+                </div>
+                <div class="col-6">
+                    <label class="small text-muted">วันเกิด</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="col-4">
+                    <label class="small text-muted">สีตัว</label>
+                    <input type="text" class="form-control" placeholder="BODY">
+                </div>
+                <div class="col-4">
+                    <label class="small text-muted">สีหัว</label>
+                    <input type="text" class="form-control" placeholder="HEAD">
+                </div>
+                <div class="col-4">
+                    <label class="small text-muted">สีอก</label>
+                    <input type="text" class="form-control" placeholder="CHEST">
+                </div>
             </div>
-            <button class="btn btn-sm btn-primary">ดูรายละเอียด</button>
+
+            <div class="section-title">2. ข้อมูลพ่อพันธุ์ (Male)</div>
+            <div class="row g-2">
+                <div class="col-12 mb-2">
+                    <input type="text" class="form-control" placeholder="ID พ่อพันธุ์">
+                </div>
+                <div class="col-6">
+                    <input type="text" class="form-control" placeholder="ฟาร์ม/ประเทศ">
+                </div>
+                <div class="col-6 text-center pt-2 small text-muted">ข้อมูลสีดึงอัตโนมัติ*</div>
+            </div>
+
+            <div class="section-title">3. ข้อมูลแม่พันธุ์ (Female)</div>
+            <div class="row g-2">
+                <div class="col-12 mb-2">
+                    <input type="text" class="form-control" placeholder="ID แม่พันธุ์">
+                </div>
+                <div class="col-6">
+                    <input type="text" class="form-control" placeholder="ฟาร์ม/ประเทศ">
+                </div>
+                <div class="col-6 text-center pt-2 small text-muted">ข้อมูลสีดึงอัตโนมัติ*</div>
+            </div>
+
+            <button type="button" class="btn-save" onclick="saveData()">
+                <i class="fas fa-save me-2"></i>บันทึกข้อมูล
+            </button>
+        </form>
+    </div>
+
+    <div id="historySection">
+        <button class="btn btn-sm btn-secondary mb-3" onclick="goBack()">กลับหน้าหลัก</button>
+        <div class="bird-card d-flex justify-content-between align-items-center">
+            <div>
+                <div class="fw-bold">ZAM 201</div>
+                <small>BORN: 20 Sep 25</small>
+            </div>
+            <i class="fas fa-chevron-right text-muted"></i>
         </div>
     </div>
 </div>
 
 <script>
-    function showHistory() {
-        document.getElementById('historySection').style.display = 'block';
-        window.scrollTo(0, document.body.scrollHeight);
+    function showForm() {
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('formSection').style.display = 'block';
     }
-    function hideHistory() {
+    function showHistory() {
+        document.getElementById('mainMenu').style.display = 'none';
+        document.getElementById('historySection').style.display = 'block';
+    }
+    function goBack() {
+        document.getElementById('formSection').style.display = 'none';
         document.getElementById('historySection').style.display = 'none';
+        document.getElementById('mainMenu').style.display = 'block';
+    }
+    function saveData() {
+        alert('ระบบจะทำการส่งข้อมูลไปยัง Google Sheets...');
+        // ในขั้นต่อไปเราจะเชื่อมต่อกับ Google Apps Script เพื่อบันทึกจริง
     }
 </script>
 
